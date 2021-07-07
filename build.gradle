@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'skywolf46.wolfradle' version "1.1.0"
+    id 'org.jetbrains.kotlin.jvm' version '1.5.20'
+}
+
+version rootProject.properties["version"]
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    wolfyUtil("1.49.0")
+    spigotApi("1.16.5")
+    compileOnly("skywolf46:commandannotation:latest.release")
+    compileOnly("org.spigotmc:spigot:1.12.2")
+    compileOnly("skywolf46:placeholders:latest.release")
+    compileOnly("skywolf46:microgamelib:1.0.20")
+    compileOnly("skywolf46:inventoryuserinterface:latest.release")
+    compileOnly("skywolf46:asyncdataloader-core:latest.release")
+    compileOnly("skywolf46:asyncdataloader-file:latest.release")
+    compileOnly("skywolf46:asyncdataloader-mysql:latest.release")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "Reposilite"
+            url(rootProject.properties["snapshot"] as Boolean ? rootProject.properties['reposilite.snapshot'] as String : rootProject.properties['reposilite.release'] as String)
+            credentials {
+                username rootProject.properties['reposilite.user'] as String
+                password rootProject.properties['reposilite.token'] as String
+            }
+        }
+    }
+    publications {
+        create("jar", MavenPublication) {
+            groupId 'skywolf46'
+            artifactId "morerecipes"
+            version rootProject.properties['version'] as String
+            from components.java
+        }
+    }
+}
+
+
